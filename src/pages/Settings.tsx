@@ -25,6 +25,18 @@ const settingsSections = [
 
 export default function Settings() {
   const [activeSection, setActiveSection] = useState('profile');
+  const [complianceSettings, setComplianceSettings] = useState({
+    zeroKnowledge: true,
+    immutableAudit: true,
+    consentSharing: false
+  });
+
+  const toggleCompliance = (id: string) => {
+    setComplianceSettings(prev => ({
+      ...prev,
+      [id as keyof typeof prev]: !prev[id as keyof typeof prev]
+    }));
+  };
 
   // Mock Ubuntu Score Data
   const mockComponents = { reciprocity: 85, consistency: 70, endorsements: 60, governance: 90, sharing: 50 };
@@ -163,9 +175,21 @@ export default function Settings() {
                        POPIA Protections
                      </h4>
                      <div className="space-y-4">
-                       <ComplianceToggle label="Zero-Knowledge Identity" enabled={true} />
-                       <ComplianceToggle label="Immutable Audit Trail" enabled={true} />
-                       <ComplianceToggle label="Consent-Based Sharing" enabled={false} />
+                       <ComplianceToggle 
+                         label="Zero-Knowledge Identity" 
+                         enabled={complianceSettings.zeroKnowledge} 
+                         onToggle={() => toggleCompliance('zeroKnowledge')}
+                       />
+                       <ComplianceToggle 
+                         label="Immutable Audit Trail" 
+                         enabled={complianceSettings.immutableAudit} 
+                         onToggle={() => toggleCompliance('immutableAudit')}
+                       />
+                       <ComplianceToggle 
+                         label="Consent-Based Sharing" 
+                         enabled={complianceSettings.consentSharing} 
+                         onToggle={() => toggleCompliance('consentSharing')}
+                       />
                      </div>
                    </div>
                  </div>
@@ -243,7 +267,7 @@ function UbuntuComponent({ label, value, weight }: any) {
   );
 }
 
-function ComplianceToggle({ label, enabled }: any) {
+function ComplianceToggle({ label, enabled, onToggle }: any) {
   return (
     <div className="flex items-center justify-between py-2">
       <div className="flex items-center gap-3">
@@ -252,9 +276,16 @@ function ComplianceToggle({ label, enabled }: any) {
           <Info size={14} />
         </div>
       </div>
-      <div className={`w-12 h-6 rounded-full relative transition-colors ${enabled ? 'bg-primary' : 'bg-secondary'}`}>
-        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${enabled ? 'right-1' : 'left-1'}`} />
-      </div>
+      <button 
+        onClick={onToggle}
+        className={`w-12 h-6 rounded-full relative transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+          enabled ? 'bg-primary' : 'bg-secondary'
+        }`}
+      >
+        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${
+          enabled ? 'right-1' : 'left-1'
+        }`} />
+      </button>
     </div>
   );
 }
