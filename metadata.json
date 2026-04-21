@@ -1,0 +1,6 @@
+{
+  "name": "Ubuntu Pools Sovereign Hub",
+  "description": "POPIA-compliant community governance and prosperity platform hosted in AWS Africa (Cape Town). Operationalizing collective interdependence through the Ubuntu Score reputation system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["analytics", "governance", "real-time-monitoring"]
+}
